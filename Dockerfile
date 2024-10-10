@@ -1,5 +1,5 @@
 # base image
-FROM python:3.8.12
+FROM nvidia/cuda:11.6.1-cudnn8-runtime-ubuntu20.04
 LABEL org.opencontainers.image.source https://github.com/serengil/deepface
 
 # -----------------------------------
@@ -13,8 +13,23 @@ WORKDIR /app
 
 # -----------------------------------
 # update image os
-RUN apt-get update
-RUN apt-get install ffmpeg libsm6 libxext6 -y
+RUN apt-get update && apt-get install -y curl software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update && apt-get install -y python3.10=3.10.15* python3.10-distutils python3.10-dev
+
+# 安装OpenCV所需的依赖
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0
+
+# 安装pip for Python 3.10
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN python3.10 get-pip.py
+RUN rm get-pip.py
+
+# 设置Python 3.10为默认版本
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+RUN update-alternatives --set python3 /usr/bin/python3.10
 
 # -----------------------------------
 # Copy required files from repo into image
@@ -28,10 +43,10 @@ COPY ./README.md /app/
 
 # -----------------------------------
 # if you plan to use a GPU, you should install the 'tensorflow-gpu' package
-# RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org tensorflow-gpu
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org tensorflow
 
 # if you plan to use face anti-spoofing, then activate this line
-# RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org torch==2.1.2
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org torch==2.1.2
 # -----------------------------------
 # install deepface from pypi release (might be out-of-date)
 # RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org deepface
@@ -50,6 +65,7 @@ RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted
 # -----------------------------------
 # environment variables
 ENV PYTHONUNBUFFERED=1
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
 # -----------------------------------
 # run the app (re-configure port if necessary)
