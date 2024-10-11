@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from deepface import DeepFace
 from deepface.api.src.modules.core import service
 from deepface.commons.logger import Logger
+import numpy as np
 
 logger = Logger()
 
@@ -94,3 +95,41 @@ def analyze():
     logger.debug(demographies)
 
     return demographies
+
+
+@blueprint.route("/extract_faces", methods=["POST"])
+def extract_faces():
+    input_args = request.get_json()
+
+    if input_args is None:
+        return {"message": "空输入集合"}
+
+    img_path = input_args.get("img") or input_args.get("img_path")
+    if img_path is None:
+        return {"message": "必须传入img_path参数"}
+
+    faces = service.extract_faces(
+        img_path=img_path,
+        detector_backend=input_args.get("detector_backend", "opencv"),
+        enforce_detection=input_args.get("enforce_detection", True),
+        align=input_args.get("align", True),
+        expand_percentage=input_args.get("expand_percentage", 0),
+        anti_spoofing=input_args.get("anti_spoofing", False),
+    )
+
+    # 检查返回值是否为元组（表示错误）
+    if isinstance(faces, tuple):
+        return faces  # 这里直接返回错误信息和状态码
+
+    # 如果不是元组，那么就是正常的结果
+    # 将 NumPy 数组转换为可 JSON 序列化的格式
+    for face in faces.get("results", []):
+        if "face" in face:
+            if isinstance(face["face"], np.ndarray):
+                face["face"] = face["face"].tolist()
+            elif not isinstance(face["face"], list):
+                face["face"] = list(face["face"])
+
+    logger.debug(faces)
+
+    return faces

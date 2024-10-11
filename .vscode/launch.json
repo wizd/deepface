@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File with Arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
+        },
+        {
+            "name": "Debug DeepFace API",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/deepface/api/src/api.py",
+            "args": ["--port", "5031"],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "-1"
+            },
+            "python": "/home/wizard/miniconda3/envs/deepface/bin/python",
+            "envFile": "${workspaceFolder}/.env",
+            "preLaunchTask": "Activate Conda Environment"
+        }
+    ]
+}

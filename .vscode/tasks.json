@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Activate Conda Environment",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-c",
+                "source $HOME/miniconda3/etc/profile.d/conda.sh && conda activate deepface"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

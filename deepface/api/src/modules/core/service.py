@@ -86,3 +86,30 @@ def analyze(
     except Exception as err:
         tb_str = traceback.format_exc()
         return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
+
+
+def extract_faces(
+    img_path: str,
+    detector_backend: str,
+    enforce_detection: bool,
+    align: bool,
+    expand_percentage: int,
+    anti_spoofing: bool,
+):
+    try:
+        faces = DeepFace.extract_faces(
+            img_path=img_path,
+            detector_backend=detector_backend,
+            enforce_detection=enforce_detection,
+            align=align,
+            expand_percentage=expand_percentage,
+            anti_spoofing=anti_spoofing,
+        )
+        # 将 NumPy 数组转换为可 JSON 序列化的格式
+        for face in faces:
+            if "face" in face:
+                face["face"] = face["face"].tolist()
+        return {"results": faces}
+    except Exception as err:
+        tb_str = traceback.format_exc()
+        return {"error": f"提取人脸时发生异常: {str(err)} - {tb_str}"}, 400

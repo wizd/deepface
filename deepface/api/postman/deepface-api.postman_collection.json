@@ -97,6 +97,37 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Extract Faces",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"img_path\": \"/path/to/your/image.jpg\",\n    \"detector_backend\": \"opencv\",\n    \"enforce_detection\": true,\n    \"align\": true,\n    \"expand_percentage\": 0,\n    \"anti_spoofing\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/extract_faces",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"extract_faces"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
