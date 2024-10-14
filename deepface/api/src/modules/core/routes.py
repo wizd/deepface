@@ -3,11 +3,23 @@ from deepface import DeepFace
 from deepface.api.src.modules.core import service
 from deepface.commons.logger import Logger
 import numpy as np
+from functools import wraps
+import traceback
 
 logger = Logger()
 
 blueprint = Blueprint("routes", __name__)
 
+def error_handler(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error in {f.__name__}: {str(e)}")
+            logger.error(traceback.format_exc())
+            return {"error": str(e)}, 500
+    return decorated_function
 
 @blueprint.route("/")
 def home():
@@ -15,15 +27,16 @@ def home():
 
 
 @blueprint.route("/represent", methods=["POST"])
+@error_handler
 def represent():
     input_args = request.get_json()
 
     if input_args is None:
-        return {"message": "empty input set passed"}
+        return {"message": "empty input set passed"}, 400
 
     img_path = input_args.get("img") or input_args.get("img_path")
     if img_path is None:
-        return {"message": "you must pass img_path input"}
+        return {"message": "you must pass img_path input"}, 400
 
     obj = service.represent(
         img_path=img_path,
@@ -41,20 +54,21 @@ def represent():
 
 
 @blueprint.route("/verify", methods=["POST"])
+@error_handler
 def verify():
     input_args = request.get_json()
 
     if input_args is None:
-        return {"message": "empty input set passed"}
+        return {"message": "empty input set passed"}, 400
 
     img1_path = input_args.get("img1") or input_args.get("img1_path")
     img2_path = input_args.get("img2") or input_args.get("img2_path")
 
     if img1_path is None:
-        return {"message": "you must pass img1_path input"}
+        return {"message": "you must pass img1_path input"}, 400
 
     if img2_path is None:
-        return {"message": "you must pass img2_path input"}
+        return {"message": "you must pass img2_path input"}, 400
 
     verification = service.verify(
         img1_path=img1_path,
@@ -73,15 +87,16 @@ def verify():
 
 
 @blueprint.route("/analyze", methods=["POST"])
+@error_handler
 def analyze():
     input_args = request.get_json()
 
     if input_args is None:
-        return {"message": "empty input set passed"}
+        return {"message": "empty input set passed"}, 400
 
     img_path = input_args.get("img") or input_args.get("img_path")
     if img_path is None:
-        return {"message": "you must pass img_path input"}
+        return {"message": "you must pass img_path input"}, 400
 
     demographies = service.analyze(
         img_path=img_path,
@@ -98,15 +113,16 @@ def analyze():
 
 
 @blueprint.route("/extract_faces", methods=["POST"])
+@error_handler
 def extract_faces():
     input_args = request.get_json()
 
     if input_args is None:
-        return {"message": "空输入集合"}
+        return {"message": "空输入集合"}, 400
 
     img_path = input_args.get("img") or input_args.get("img_path")
     if img_path is None:
-        return {"message": "必须传入img_path参数"}
+        return {"message": "必须传入img_path参数"}, 400
 
     faces = service.extract_faces(
         img_path=img_path,
