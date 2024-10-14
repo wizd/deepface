@@ -66,6 +66,9 @@ COPY ./README.md /app/
 # if you plan to use a GPU, you should install the 'tensorflow-gpu' package
 RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org tensorflow-gpu==2.9.0
 
+# 安装PyTorch（支持CUDA）
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org torch torchvision torchaudio
+
 # if you plan to use face anti-spoofing, then activate this line
 RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org torch==2.1.2
 # -----------------------------------
