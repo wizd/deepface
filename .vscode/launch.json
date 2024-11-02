@@ -17,7 +17,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/deepface/api/src/api.py",
-            "args": ["--port", "5031"],
+            "args": ["--port", "5032"],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {

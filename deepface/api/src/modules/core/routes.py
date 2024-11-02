@@ -5,6 +5,10 @@ from deepface.commons.logger import Logger
 import numpy as np
 from functools import wraps
 import traceback
+import base64
+import cv2
+from io import BytesIO
+from PIL import Image
 
 logger = Logger()
 
@@ -138,13 +142,24 @@ def extract_faces():
         return faces  # 这里直接返回错误信息和状态码
 
     # 如果不是元组，那么就是正常的结果
-    # 将 NumPy 数组转换为可 JSON 序列化的格式
+    # 将 NumPy 数组转换为 PNG 格式的 base64 编码
     for face in faces.get("results", []):
         if "face" in face:
             if isinstance(face["face"], np.ndarray):
-                face["face"] = face["face"].tolist()
-            elif not isinstance(face["face"], list):
-                face["face"] = list(face["face"])
+                # 将 NumPy 数组转换为 PIL Image
+                img = Image.fromarray(face["face"].astype('uint8'))
+                
+                # 创建一个字节流
+                buffered = BytesIO()
+                
+                # 将图像保存为 PNG 格式到字节流
+                img.save(buffered, format="PNG")
+                
+                # 获取字节流的内容并进行 base64 编码
+                img_str = base64.b64encode(buffered.getvalue()).decode()
+                
+                # 添加 data URI 前缀
+                face["face"] = f"data:image/png;base64,{img_str}"
 
     logger.debug(faces)
 
