@@ -1,19 +1,31 @@
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04
+FROM nvidia/cuda:11.2.2-cudnn8-devel-ubuntu20.04
 
 # 预先设置时区，避免交互
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
-# 安装Python 3.8.12
+# 安装Python 3.10.15
 RUN apt-get update && apt-get install -y \
-    python3.8 \
+    software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update \
+    && apt-get install -y \
+    python3.10 \
     python3-pip \
-    python3.8-dev \
+    python3.10-dev \
+    python3.10-distutils \
     && rm -rf /var/lib/apt/lists/*
 
-# 设置Python 3.8为默认Python版本
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+# 设置Python 3.10为默认Python版本
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+
+# 使用get-pip.py升级pip
+RUN apt-get update && apt-get install -y wget \
+    && wget https://bootstrap.pypa.io/get-pip.py \
+    && python get-pip.py --force-reinstall \
+    && rm get-pip.py \
+    && rm -rf /var/lib/apt/lists/*
 
 LABEL org.opencontainers.image.source https://github.com/serengil/deepface
 
@@ -49,29 +61,12 @@ COPY ./setup.py /app/
 COPY ./README.md /app/
 COPY ./entrypoint.sh /app/deepface/api/src/entrypoint.sh
 
-# 添加 CUDA 相关环境变量
-ENV PATH=/usr/local/cuda/bin:${PATH}
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-ENV CUDA_HOME=/usr/local/cuda
+# -----------------------------------
+# if you plan to use a GPU, you should install the 'tensorflow-gpu' package
+# RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org tensorflow-gpu
 
-# 安装 CUDA 工具
-RUN apt-get update && apt-get install -y \
-    cuda-command-line-tools-12-4 \
-    && rm -rf /var/lib/apt/lists/*
-
-# 替换原有的 tensorflow 安装命令
-RUN pip install tensorflow
-
-# 替换 TensorRT 相关安装命令
-RUN pip install nvidia-pyindex && \
-    pip install nvidia-tensorrt==8.6.1 && \
-    pip install tensorflow[and-cuda]
-
-# 如果上述方案不工作，可以尝试这个替代方案：
-# RUN python3 -m pip install --upgrade pip && \
-#     pip install nvidia-tensorrt && \
-#     pip install tensorflow-gpu
-
+# if you plan to use face anti-spoofing, then activate this line
+# RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org torch==2.1.2
 # -----------------------------------
 # install deepface from pypi release (might be out-of-date)
 # RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org deepface

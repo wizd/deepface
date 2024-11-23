@@ -21,7 +21,8 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
-                "CUDA_VISIBLE_DEVICES": "-1"
+                "CUDA_VISIBLE_DEVICES": "0",
+                "PYTHONPATH": "${workspaceFolder}"
             },
             "python": "/home/wizard/miniconda3/envs/deepface/bin/python",
             "envFile": "${workspaceFolder}/.env",
