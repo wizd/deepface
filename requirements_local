@@ -1,6 +1,6 @@
-numpy
+numpy==1.23.5
 pandas
 Pillow==9.0.0
 opencv-python
-tensorflow==2.13.1
+tensorflow==2.14.0
 keras

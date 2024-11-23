@@ -1,2 +1,9 @@
 export PYTHONPATH=/home/wizard/apps/deepface
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+
+
+# docker build
+
+export DOCKER_BUILDKIT=1
+docker build -t deepface --progress=plain .
