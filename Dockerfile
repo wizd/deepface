@@ -86,7 +86,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
     --trusted-host=files.pythonhosted.org \
-    tensorflow==2.14.0 && \
+    tensorflow==2.18.0 && \
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
     --trusted-host=files.pythonhosted.org \
