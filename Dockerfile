@@ -86,7 +86,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
     --trusted-host=files.pythonhosted.org \
-    tensorflow==2.18.0 && \
+    tensorflow==2.16.1 && \
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
@@ -105,6 +105,15 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # -----------------------------------
 # environment variables
 ENV PYTHONUNBUFFERED=1
+ENV TF_FORCE_GPU_ALLOW_GROWTH=true
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ENV XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/local/cuda
+
+# Set CUDNN environment variables
+RUN CUDNN_PATH=$(dirname $(python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) \
+    && echo "export CUDNN_PATH=$CUDNN_PATH" >> /etc/profile \
+    && echo "export LD_LIBRARY_PATH=\${CUDNN_PATH}/lib:\${LD_LIBRARY_PATH}" >> /etc/profile \
+    && echo "export LD_LIBRARY_PATH=\${CUDNN_PATH}/lib:\${LD_LIBRARY_PATH}" >> /root/.bashrc
 
 # -----------------------------------
 # run the app (re-configure port if necessary)
