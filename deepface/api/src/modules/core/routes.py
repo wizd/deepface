@@ -57,9 +57,9 @@ def configure_gpu():
                 for gpu in gpus:
                     tf.config.experimental.set_virtual_device_configuration(
                         gpu,
-                        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)]
+                        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=8192)]
                     )
-                logger.info("已限制GPU内存使用量为4GB")
+                logger.info("已限制GPU内存使用量为8GB")
             except Exception as e2:
                 logger.error(f"所有GPU配置方式均失败: {e2}")
                 return False
