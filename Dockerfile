@@ -2,11 +2,16 @@
 # syntax=docker/dockerfile:1.4
 
 # 基础构建阶段
-FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04 AS builder
+FROM nvidia/cuda:12.3.2-cudnn9-devel-ubuntu20.04 AS builder
 
 # 预先设置时区，避免交互
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
+
+# NVIDIA GPU 相关环境变量
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video
+ENV NVIDIA_REQUIRE_CUDA="cuda>=12.3"
 
 # 使用 BuildKit 缓存挂载来加速包安装
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -86,8 +91,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
     --trusted-host=files.pythonhosted.org \
-    tensorflow==2.16.1 && \
-    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 && \
+    tensorflow==2.18.0 && \
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 && \
     pip install --trusted-host pypi.org \
     --trusted-host pypi.python.org \
     --trusted-host=files.pythonhosted.org \
@@ -106,8 +111,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # environment variables
 ENV PYTHONUNBUFFERED=1
 ENV TF_FORCE_GPU_ALLOW_GROWTH=true
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 ENV XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/local/cuda
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=/usr/local/cuda/bin:$PATH
 
 # Set CUDNN environment variables
 RUN CUDNN_PATH=$(dirname $(python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)")) \

@@ -1,6 +1,6 @@
 numpy
 pandas
-Pillow==9.0.0
+Pillow
 opencv-python
-tensorflow==2.16.1
+tensorflow[and-cuda]
 tf-keras

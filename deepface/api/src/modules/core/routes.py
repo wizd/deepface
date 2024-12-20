@@ -1,38 +1,100 @@
 # built-in dependencies
 from typing import Union
+import os
+import logging
+
+import tensorflow as tf
+import keras
+
+# 在导入TensorFlow之前设置环境变量
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 减少TF日志输出
 
 # 3rd party dependencies
 from flask import Blueprint, request
 import numpy as np
-import tensorflow as tf
+from keras import backend as K
 from deepface.commons.logger import Logger
 
 logger = Logger()
 
-# GPU配置
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
+# 配置GPU内存
+def configure_gpu():
+    logger.info("开始检测GPU...")
+    
+    # 检查CUDA环境变量
+    cuda_visible_devices = os.environ.get('CUDA_VISIBLE_DEVICES')
+    logger.info(f"CUDA_VISIBLE_DEVICES: {cuda_visible_devices}")
+    
+    # 检查TensorFlow是否能看到CUDA
+    logger.info(f"TensorFlow是否支持CUDA: {tf.test.is_built_with_cuda()}")
+    logger.info(f"TensorFlow是否支持GPU: {tf.test.is_built_with_gpu_support()}")
+    
     try:
-        # 使用固定内存限制而不是动态增长
-        tf.config.experimental.set_virtual_device_configuration(
-            gpus[0],
-            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=8192)]  # 限制使用8GB显存
-        )
-        logger.info(f"GPU available and configured with 8GB memory limit: {gpus}")
-    except RuntimeError as e:
-        logger.error(f"GPU configuration error: {e}")
-        # 如果配置失败，尝试禁用GPU
+        # 设置TensorFlow日志级别
+        tf.get_logger().setLevel('INFO')
+        
+        # 设置内存增长前先清理GPU内存
+        keras.backend.clear_session()
+        
+        # 配置GPU内存使用
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        logger.info(f"检测到的GPU设备: {gpus}")
+        
+        if not gpus:
+            logger.info("未检测到GPU设备，将使用CPU模式")
+            return False
+            
+        # 尝试多种GPU配置方式
         try:
-            tf.config.set_visible_devices([], 'GPU')
-            logger.error("GPU has been disabled due to configuration error")
-        except:
-            pass
+            # 方式1：限制GPU内存增长
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+                logger.info(f"已为设备 {gpu} 启用内存增长")
+        except Exception as e:
+            logger.info(f"设置内存增长失败，尝试其他配置方式: {e}")
+            try:
+                # 方式2：限制GPU内存使用量
+                for gpu in gpus:
+                    tf.config.experimental.set_virtual_device_configuration(
+                        gpu,
+                        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)]
+                    )
+                logger.info("已限制GPU内存使用量为4GB")
+            except Exception as e2:
+                logger.error(f"所有GPU配置方式均失败: {e2}")
+                return False
+        
+        # 验证GPU是否可用
+        try:
+            with tf.device('/GPU:0'):
+                # 创建一个小的测试张量
+                test = tf.random.normal([8, 8])
+                logger.info(f"GPU测试成功，张量设备: {test.device}")
+                logger.info("GPU配置成功完成")
+                return True
+        except Exception as e:
+            logger.error(f"GPU验证失败: {e}")
+            return False
+            
+    except Exception as e:
+        logger.error(f"GPU配置过程中发生错误: {e}")
+        return False
+
+# 全局GPU配置
+GPU_AVAILABLE = configure_gpu()
+logger.info(f"GPU最终状态: {'可用' if GPU_AVAILABLE else '不可用'}")
+
+if not GPU_AVAILABLE:
+    logger.info("GPU不可用，将使用CPU模式运行。请确保：")
+    logger.info("1. CUDA和cuDNN已正确安装")
+    logger.info("2. TensorFlow-GPU版本与CUDA版本匹配")
+    logger.info("3. LD_LIBRARY_PATH包含CUDA库路径")
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # 禁用GPU
 
 # project dependencies
 from deepface import DeepFace
 from deepface.api.src.modules.core import service
 from deepface.commons import image_utils
-import numpy as np
 from functools import wraps
 import traceback
 import base64
@@ -204,15 +266,6 @@ def analyze():
     return demographies
 
 
-# 创建线程池
-thread_pool = ThreadPoolExecutor(max_workers=4)
-thread_local = threading.local()
-
-def get_deepface():
-    if not hasattr(thread_local, "deepface"):
-        thread_local.deepface = DeepFace
-    return thread_local.deepface
-
 @blueprint.route("/extract_faces", methods=["POST"])
 @error_handler
 def extract_faces():
@@ -225,31 +278,39 @@ def extract_faces():
     if img_path is None:
         return {"message": "必须传入img_path参数"}, 400
 
-    def process_image():
-        try:
-            deepface = get_deepface()
-            faces = deepface.extract_faces(
+    try:
+        # 记录GPU使用情况
+        if GPU_AVAILABLE:
+            logger.info("Processing with GPU")
+            # 确保TensorFlow使用GPU
+            with tf.device('/GPU:0'):
+                faces = DeepFace.extract_faces(
+                    img_path=img_path,
+                    detector_backend=input_args.get("detector_backend", "retinaface"),
+                    enforce_detection=input_args.get("enforce_detection", True),
+                    align=input_args.get("align", True),
+                    expand_percentage=input_args.get("expand_percentage", 0),
+                    anti_spoofing=input_args.get("anti_spoofing", False),
+                )
+        else:
+            logger.info("Processing with CPU as GPU is not available")
+            faces = DeepFace.extract_faces(
                 img_path=img_path,
-                detector_backend=input_args.get("detector_backend", "retinaface"),  # 默认使用更快的检测器
+                detector_backend=input_args.get("detector_backend", "retinaface"),
                 enforce_detection=input_args.get("enforce_detection", True),
                 align=input_args.get("align", True),
                 expand_percentage=input_args.get("expand_percentage", 0),
                 anti_spoofing=input_args.get("anti_spoofing", False),
             )
 
-            # 优化图像处理和转换
-            for face in faces:
-                if "face" in face and isinstance(face["face"], np.ndarray):
-                    # 用更高效的图像编码方式
-                    _, buffer = cv2.imencode('.jpg', face["face"], [cv2.IMWRITE_JPEG_QUALITY, 85])
-                    face["face"] = f"data:image/jpeg;base64,{base64.b64encode(buffer.tobytes()).decode('utf-8')}"
+        # 优化图像处理和转换
+        for face in faces:
+            if "face" in face and isinstance(face["face"], np.ndarray):
+                _, buffer = cv2.imencode('.jpg', face["face"], [cv2.IMWRITE_JPEG_QUALITY, 85])
+                face["face"] = f"data:image/jpeg;base64,{base64.b64encode(buffer.tobytes()).decode('utf-8')}"
 
-            return {"results": faces}
-        except Exception as err:
-            logger.error(f"Error processing image: {str(err)}")
-            logger.error(traceback.format_exc())
-            return {"error": f"提取人脸时发生异常: {str(err)}"}, 400
-
-    # 异步提交任务到线程池
-    future = thread_pool.submit(process_image)
-    return future.result()
+        return {"results": faces}
+    except Exception as err:
+        logger.error(f"Error processing image: {str(err)}")
+        logger.error(traceback.format_exc())
+        return {"error": f"提取人脸时发生异常: {str(err)}"}, 400
