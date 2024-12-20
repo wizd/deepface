@@ -4,12 +4,34 @@ from typing import Union
 # 3rd party dependencies
 from flask import Blueprint, request
 import numpy as np
+import tensorflow as tf
+from deepface.commons.logger import Logger
+
+logger = Logger()
+
+# GPU配置
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # 使用固定内存限制而不是动态增长
+        tf.config.experimental.set_virtual_device_configuration(
+            gpus[0],
+            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=8192)]  # 限制使用8GB显存
+        )
+        logger.info(f"GPU available and configured with 8GB memory limit: {gpus}")
+    except RuntimeError as e:
+        logger.error(f"GPU configuration error: {e}")
+        # 如果配置失败，尝试禁用GPU
+        try:
+            tf.config.set_visible_devices([], 'GPU')
+            logger.error("GPU has been disabled due to configuration error")
+        except:
+            pass
 
 # project dependencies
 from deepface import DeepFace
 from deepface.api.src.modules.core import service
 from deepface.commons import image_utils
-from deepface.commons.logger import Logger
 import numpy as np
 from functools import wraps
 import traceback
@@ -17,8 +39,8 @@ import base64
 import cv2
 from io import BytesIO
 from PIL import Image
-
-logger = Logger()
+from concurrent.futures import ThreadPoolExecutor
+import threading
 
 blueprint = Blueprint("routes", __name__)
 
@@ -182,6 +204,15 @@ def analyze():
     return demographies
 
 
+# 创建线程池
+thread_pool = ThreadPoolExecutor(max_workers=4)
+thread_local = threading.local()
+
+def get_deepface():
+    if not hasattr(thread_local, "deepface"):
+        thread_local.deepface = DeepFace
+    return thread_local.deepface
+
 @blueprint.route("/extract_faces", methods=["POST"])
 @error_handler
 def extract_faces():
@@ -194,39 +225,31 @@ def extract_faces():
     if img_path is None:
         return {"message": "必须传入img_path参数"}, 400
 
-    faces = service.extract_faces(
-        img_path=img_path,
-        detector_backend=input_args.get("detector_backend", "opencv"),
-        enforce_detection=input_args.get("enforce_detection", True),
-        align=input_args.get("align", True),
-        expand_percentage=input_args.get("expand_percentage", 0),
-        anti_spoofing=input_args.get("anti_spoofing", False),
-    )
+    def process_image():
+        try:
+            deepface = get_deepface()
+            faces = deepface.extract_faces(
+                img_path=img_path,
+                detector_backend=input_args.get("detector_backend", "retinaface"),  # 默认使用更快的检测器
+                enforce_detection=input_args.get("enforce_detection", True),
+                align=input_args.get("align", True),
+                expand_percentage=input_args.get("expand_percentage", 0),
+                anti_spoofing=input_args.get("anti_spoofing", False),
+            )
 
-    # 检查返回值是否为元组（表示错误）
-    if isinstance(faces, tuple):
-        return faces  # 这里直接返回错误信息和状态码
+            # 优化图像处理和转换
+            for face in faces:
+                if "face" in face and isinstance(face["face"], np.ndarray):
+                    # 用更高效的图像编码方式
+                    _, buffer = cv2.imencode('.jpg', face["face"], [cv2.IMWRITE_JPEG_QUALITY, 85])
+                    face["face"] = f"data:image/jpeg;base64,{base64.b64encode(buffer.tobytes()).decode('utf-8')}"
 
-    # 如果不是元组，那么就是正常的结果
-    # 将 NumPy 数组转换为 PNG 格式的 base64 编码
-    for face in faces.get("results", []):
-        if "face" in face:
-            if isinstance(face["face"], np.ndarray):
-                # 将 NumPy 数组转换为 PIL Image
-                img = Image.fromarray(face["face"].astype('uint8'))
-                
-                # 创建一个字节流
-                buffered = BytesIO()
-                
-                # 将图像保存为 PNG 格式到字节流
-                img.save(buffered, format="PNG")
-                
-                # 获取字节流的内容并进行 base64 编码
-                img_str = base64.b64encode(buffered.getvalue()).decode()
-                
-                # 添加 data URI 前缀
-                face["face"] = f"data:image/png;base64,{img_str}"
+            return {"results": faces}
+        except Exception as err:
+            logger.error(f"Error processing image: {str(err)}")
+            logger.error(traceback.format_exc())
+            return {"error": f"提取人脸时发生异常: {str(err)}"}, 400
 
-    logger.debug(faces)
-
-    return faces
+    # 异步提交任务到线程池
+    future = thread_pool.submit(process_image)
+    return future.result()
