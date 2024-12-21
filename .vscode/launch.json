@@ -26,7 +26,10 @@
             "cwd": "${workspaceFolder}",
             "env": {
                 "CUDA_VISIBLE_DEVICES": "0",
-                "PYTHONPATH": "${workspaceFolder}"
+                "PYTHONPATH": "${workspaceFolder}",
+                "LD_LIBRARY_PATH": "/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH",
+                "CUDA_HOME": "/usr/local/cuda",
+                "XLA_FLAGS": "--xla_gpu_cuda_data_dir=/usr/local/cuda"
             },
             "python": "/home/wizard/miniconda3/envs/deepface/bin/python",
             "envFile": "${workspaceFolder}/.env",

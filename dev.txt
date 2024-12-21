@@ -8,6 +8,8 @@ export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 export DOCKER_BUILDKIT=1
 docker build -t deepface --progress=plain .
 
+# create new conda env is OK
+
 
 # test gpu support
 
