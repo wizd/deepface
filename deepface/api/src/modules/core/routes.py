@@ -174,7 +174,9 @@ def extract_image_from_request(img_key: str) -> Union[str, np.ndarray]:
 @blueprint.route("/represent", methods=["POST"])
 @error_handler
 def represent():
-    input_args = request.get_json() or request.form.to_dict()
+    input_args = (request.is_json and request.get_json()) or (
+        request.form and request.form.to_dict()
+    )
 
     try:
         img = extract_image_from_request("img")
@@ -199,7 +201,9 @@ def represent():
 @blueprint.route("/verify", methods=["POST"])
 @error_handler
 def verify():
-    input_args = request.get_json() or request.form.to_dict()
+    input_args = (request.is_json and request.get_json()) or (
+        request.form and request.form.to_dict()
+    )
 
     try:
         img1 = extract_image_from_request("img1")
@@ -230,7 +234,9 @@ def verify():
 @blueprint.route("/analyze", methods=["POST"])
 @error_handler
 def analyze():
-    input_args = request.get_json() or request.form.to_dict()
+    input_args = (request.is_json and request.get_json()) or (
+        request.form and request.form.to_dict()
+    )
 
     try:
         img = extract_image_from_request("img")
