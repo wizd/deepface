@@ -320,3 +320,27 @@ def extract_faces():
         logger.error(f"Error processing image: {str(err)}")
         logger.error(traceback.format_exc())
         return {"error": f"提取人脸时发生异常: {str(err)}"}, 400
+
+
+@blueprint.route("/landmark", methods=["POST"])
+@error_handler
+def landmark():
+    input_args = (request.is_json and request.get_json()) or (
+        request.form and request.form.to_dict()
+    )
+
+    try:
+        img = extract_image_from_request("img")
+    except Exception as err:
+        return {"exception": str(err)}, 400
+
+    landmarks = service.landmark(
+        img_path=img,
+        detector_backend=input_args.get("detector_backend", "dlib"),
+        enforce_detection=bool(input_args.get("enforce_detection", True)),
+        align=bool(input_args.get("align", True)),
+    )
+
+    logger.debug(landmarks)
+
+    return landmarks

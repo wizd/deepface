@@ -4,13 +4,17 @@ import base64
 import unittest
 from unittest.mock import patch, MagicMock
 from packaging import version
+from typing import Optional, Dict, List, Any, Union
 
 # 3rd party dependencies
+import pytest
 import gdown
 import numpy as np
 import flask
 from flask import Flask
 import werkzeug
+from flask.testing import FlaskClient
+from werkzeug.test import TestResponse
 
 # project dependencies
 from deepface.api.src.app import create_app
@@ -168,7 +172,7 @@ class TestVerifyEndpoint(unittest.TestCase):
             assert i.get("dominant_emotion") is not None
             assert i.get("dominant_race") is not None
 
-        logger.info("✅ analyze api test is done")
+        logger.info("�� analyze api test is done")
 
     def test_analyze_inputformats(self):
         image_path = "dataset/couple.jpg"
@@ -419,6 +423,132 @@ class TestVerifyEndpoint(unittest.TestCase):
 
         logger.info("✅ test extract_image_from_request for image string from form done")
 
+    def test_landmark(self):
+        """测试landmark API的基本功能"""
+        # 确保测试图片存在
+        download_test_images(IMG1_SOURCE)
+        
+        data = {
+            "img": "tests/dataset/img1.jpg",
+        }
+        response: TestResponse = self.app.post("/landmark", json=data)
+        assert response.status_code == 200
+        
+        result: Optional[Dict[str, Any]] = response.get_json()
+        if result is None:
+            pytest.fail("Response did not return valid JSON")
+            
+        logger.debug(result)
+        
+        # 类型安全的检查
+        if not isinstance(result, dict):
+            pytest.fail("Response is not a dictionary")
+            
+        results: Optional[List[Dict[str, Any]]] = result.get("results")
+        if not results:
+            pytest.fail("No results found in response")
+            
+        if not isinstance(results, list):
+            pytest.fail("Results is not a list")
+            
+        if not results:
+            pytest.fail("Results list is empty")
+            
+        for face_result in results:
+            if not isinstance(face_result, dict):
+                pytest.fail("Face result is not a dictionary")
+                
+            # 检查面部区域
+            if "facial_area" not in face_result:
+                pytest.fail("facial_area not found in face result")
+                
+            facial_area = face_result["facial_area"]
+            if not all(key in facial_area for key in ["x", "y", "w", "h"]):
+                pytest.fail("Missing required keys in facial_area")
+            
+            # 检查关键点
+            if "landmarks" not in face_result:
+                pytest.fail("landmarks not found in face result")
+                
+            landmarks = face_result["landmarks"]
+            if not isinstance(landmarks, list) or not landmarks:
+                pytest.fail("landmarks is not a valid list")
+                
+            for landmark in landmarks:
+                if not all(key in landmark for key in ["x", "y", "z", "point_number"]):
+                    pytest.fail("Missing required keys in landmark")
+            
+            # 检查面部特征区域
+            if "facial_features" not in face_result:
+                pytest.fail("facial_features not found in face result")
+                
+            facial_features = face_result["facial_features"]
+            required_features = [
+                "jaw_line", "left_eyebrow", "right_eyebrow",
+                "nose_bridge", "left_eye", "right_eye", "outer_lip"
+            ]
+            if not all(key in facial_features for key in required_features):
+                pytest.fail("Missing required facial features")
+            
+            # 检查���部表情系数(可选)
+            if "face_blendshapes" in face_result:
+                blendshapes = face_result["face_blendshapes"]
+                if not isinstance(blendshapes, list):
+                    pytest.fail("face_blendshapes is not a list")
+                    
+                for shape in blendshapes:
+                    if not isinstance(shape, dict):
+                        pytest.fail("blendshape is not a dictionary")
+                    if not all(key in shape for key in ["category_name", "score"]):
+                        pytest.fail("Missing required keys in blendshape")
+
+        logger.info("✅ landmark api test is done")
+
+    def test_landmark_with_base64(self):
+        """测试使用base64编码图片的landmark API"""
+        try:
+            # 确保测试图片存在
+            download_test_images(IMG1_SOURCE)
+            image_path = "/tmp/img1.jpg"  # 使用绝对路径
+            
+            with open(image_path, "rb") as image_file:
+                encoded_string = "data:image/jpeg;base64," + base64.b64encode(image_file.read()).decode("utf8")
+
+            data = {
+                "img": encoded_string,
+                "detector_backend": "mediapipe"
+            }
+
+            response: TestResponse = self.app.post("/landmark", json=data)
+            assert response.status_code == 200
+            
+            result: Optional[Dict[str, Any]] = response.get_json()
+            if result is None:
+                pytest.fail("Response did not return valid JSON")
+                
+            results = result.get("results")
+            if not results:
+                pytest.fail("No results found in response")
+                
+            if not isinstance(results, list):
+                pytest.fail("Results is not a list")
+                
+            if not results:
+                pytest.fail("Results list is empty")
+
+            logger.info("✅ landmark api test with base64 image is done")
+        except Exception as e:
+            pytest.fail(f"Test failed with error: {str(e)}")
+
+    def test_invalid_landmark(self):
+        """测试无效输入的landmark API"""
+        data = {
+            "img": "/tmp/invalid.jpg",  # 使用不存在的文件路径
+        }
+        response = self.app.post("/landmark", json=data)
+        assert response.status_code == 400
+        logger.info("✅ invalid landmark request api test is done")
+
 
 def download_test_images(url: str):
     file_name = url.split("/")[-1]
@@ -437,13 +567,17 @@ def is_form_data_file_testable() -> bool:
     Returns:
         is_form_data_file_testable (bool)
     """
-    flask_version = version.parse(flask.__version__)
-    werkzeus_version = version.parse(werkzeug.__version__)
-    threshold_version = version.parse("2.0.2")
-    is_testable = flask_version <= threshold_version and werkzeus_version <= threshold_version
-    if is_testable is False:
-        logger.warn(
-            "sending file in form data is not testable because of flask, werkzeus versions."
-            f"Expected <= {threshold_version}, but {flask_version=} and {werkzeus_version}."
-        )
-    return is_testable
+    try:
+        flask_version = version.parse(flask.__version__)
+        werkzeug_version = version.parse(getattr(werkzeug, '__version__', '0.0.0'))
+        threshold_version = version.parse("2.0.2")
+        is_testable = flask_version <= threshold_version and werkzeug_version <= threshold_version
+        if not is_testable:
+            logger.warn(
+                "sending file in form data is not testable because of flask, werkzeug versions. "
+                f"Expected <= {threshold_version}, but flask={flask_version} and werkzeug={werkzeug_version}."
+            )
+        return is_testable
+    except Exception as e:
+        logger.error(f"Error checking form data testability: {str(e)}")
+        return False
