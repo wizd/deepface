@@ -76,7 +76,7 @@
   ```json
   {
     "verified": true,          // 布尔值，表示是否为同一个人
-    "distance": 0.2,          // 浮点数，表示两张人脸的距离（相似度）
+    "distance": 0.2,          // 浮点数，表示两张人脸的距离（相似��）
     "threshold": 0.4,         // 浮点数，判定阈值
     "model": "VGG-Face",      // 字符串，使用的模型名称
     "detector_backend": "opencv",  // 字符串，使用的检测器
@@ -198,6 +198,65 @@
           "mouth_right": [180, 270],
           "mouth_left": [250, 270]
         }
+      }
+      // 可能包含多个人脸结果
+    ]
+  }
+  ```
+- **错误响应:**
+  ```json
+  {
+    "error": "错误信息"
+  }
+  ```
+
+### 6. 人脸关键点检测
+
+- **URL:** `/landmark`
+- **方法:** `POST`
+- **描述:** 检测图像中的人脸关键点、面部特征区域和表情系数
+- **请求格式:** `multipart/form-data` 或 `application/json`
+- **参数:**
+  - `img`: 必需，图像数据（可以是base64编码的图像、图像URL、图像文件）
+  - `detector_backend`: 可选，默认值 "mediapipe"
+  - `enforce_detection`: 可选，布尔值，默认值 true
+  - `align`: 可选，布尔值，默认值 true
+- **响应:** 
+  ```json
+  {
+    "results": [
+      {
+        "facial_area": {
+          "x": 104,    // 整数，人脸区域左上角x坐标
+          "y": 85,     // 整数，人脸区域左上角y坐标
+          "w": 251,    // 整数，人脸区域宽度
+          "h": 251     // 整数，人脸区域高度
+        },
+        "landmarks": [
+          {
+            "x": 200,           // 整数，关键点x坐标
+            "y": 220,           // 整数，关键点y坐标
+            "z": 0.5,           // 浮点数，关键点深度信息
+            "point_number": 1    // 整数，关键点编号
+          }
+          // ... 更多关键点
+        ],
+        "facial_features": {
+          "jaw_line": [],       // 下巴轮廓关键点
+          "left_eyebrow": [],   // 左眉毛关键点
+          "right_eyebrow": [],  // 右眉毛关键点
+          "nose_bridge": [],    // 鼻梁关键点
+          "left_eye": [],      // 左眼关键点
+          "right_eye": [],     // 右眼关键点
+          "outer_lip": []      // 外唇关键点
+        },
+        "face_blendshapes": [   // 可选，面部表情系数
+          {
+            "category_name": "smile",
+            "score": 0.8
+          }
+          // ... 更多表情系数
+        ]
       }
       // 可能包含多个人脸结果
     ]
