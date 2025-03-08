@@ -4,6 +4,7 @@
 
 [![Downloads](https://static.pepy.tech/personalized-badge/deepface?period=total&units=international_system&left_color=grey&right_color=blue&left_text=downloads)](https://pepy.tech/project/deepface)
 [![Stars](https://img.shields.io/github/stars/serengil/deepface?color=yellow&style=flat&label=%E2%AD%90%20stars)](https://github.com/serengil/deepface/stargazers)
+[![Docker Pulls](https://img.shields.io/docker/pulls/serengil/deepface?logo=docker)](https://hub.docker.com/r/serengil/deepface)
 [![License](http://img.shields.io/:license-MIT-green.svg?style=flat)](https://github.com/serengil/deepface/blob/master/LICENSE)
 [![Tests](https://github.com/serengil/deepface/actions/workflows/tests.yml/badge.svg)](https://github.com/serengil/deepface/actions/workflows/tests.yml)
 [![DOI](http://img.shields.io/:DOI-10.17671/gazibtd.1399077-blue.svg?style=flat)](https://doi.org/10.17671/gazibtd.1399077)
@@ -16,6 +17,20 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/serengil?logo=GitHub&color=lightgray)](https://github.com/sponsors/serengil)
 [![Buy Me a Coffee](https://img.shields.io/badge/-buy_me_a%C2%A0coffee-gray?logo=buy-me-a-coffee)](https://buymeacoffee.com/serengil)
 
+<div align="center">
+  <a href="https://trendshift.io/repositories/4227" target="_blank"><img src="https://trendshift.io/api/badge/repositories/4227" alt="serengil%2Fdeepface | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+  <!--
+  <a href="https://www.producthunt.com/posts/deepface?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-deepface" target="_blank">
+      <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=753599&theme=light" alt="DeepFace - A Lightweight Deep Face Recognition Library for Python | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
+  </a>
+  -->
+</div>
+
+<!--
+[![Hacker News](https://img.shields.io/badge/dynamic/json?color=orange&label=Hacker%20News&query=score&url=https%3A%2F%2Fhacker-news.firebaseio.com%2Fv0%2Fitem%2F42584896.json&logo=y-combinator)](https://news.ycombinator.com/item?id=42584896)
+[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-%E2%96%B2-orange?logo=producthunt)](https://www.producthunt.com/posts/deepface?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-deepface)
+-->
+
 <!-- [![DOI](http://img.shields.io/:DOI-10.1109/ICEET53442.2021.9659697-blue.svg?style=flat)](https://doi.org/10.1109/ICEET53442.2021.9659697) -->
 <!-- [![DOI](http://img.shields.io/:DOI-10.1109/ASYU50717.2020.9259802-blue.svg?style=flat)](https://doi.org/10.1109/ASYU50717.2020.9259802) -->
 
@@ -23,7 +38,7 @@
 
 <p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-icon-labeled.png" width="200" height="240"></p>
 
-DeepFace is a lightweight [face recognition](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/) and facial attribute analysis ([age](https://sefiks.com/2019/02/13/apparent-age-and-gender-prediction-in-keras/), [gender](https://sefiks.com/2019/02/13/apparent-age-and-gender-prediction-in-keras/), [emotion](https://sefiks.com/2018/01/01/facial-expression-recognition-with-keras/) and [race](https://sefiks.com/2019/11/11/race-and-ethnicity-prediction-in-keras/)) framework for python. It is a hybrid face recognition framework wrapping **state-of-the-art** models: [`VGG-Face`](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/), [`FaceNet`](https://sefiks.com/2018/09/03/face-recognition-with-facenet-in-keras/), [`OpenFace`](https://sefiks.com/2019/07/21/face-recognition-with-openface-in-keras/), [`DeepFace`](https://sefiks.com/2020/02/17/face-recognition-with-facebook-deepface-in-keras/), [`DeepID`](https://sefiks.com/2020/06/16/face-recognition-with-deepid-in-keras/), [`ArcFace`](https://sefiks.com/2020/12/14/deep-face-recognition-with-arcface-in-keras-and-python/), [`Dlib`](https://sefiks.com/2020/07/11/face-recognition-with-dlib-in-python/), `SFace` and `GhostFaceNet`.
+DeepFace is a lightweight [face recognition](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/) and facial attribute analysis ([age](https://sefiks.com/2019/02/13/apparent-age-and-gender-prediction-in-keras/), [gender](https://sefiks.com/2019/02/13/apparent-age-and-gender-prediction-in-keras/), [emotion](https://sefiks.com/2018/01/01/facial-expression-recognition-with-keras/) and [race](https://sefiks.com/2019/11/11/race-and-ethnicity-prediction-in-keras/)) framework for python. It is a hybrid face recognition framework wrapping **state-of-the-art** models: [`VGG-Face`](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/), [`FaceNet`](https://sefiks.com/2018/09/03/face-recognition-with-facenet-in-keras/), [`OpenFace`](https://sefiks.com/2019/07/21/face-recognition-with-openface-in-keras/), [`DeepFace`](https://sefiks.com/2020/02/17/face-recognition-with-facebook-deepface-in-keras/), [`DeepID`](https://sefiks.com/2020/06/16/face-recognition-with-deepid-in-keras/), [`ArcFace`](https://sefiks.com/2020/12/14/deep-face-recognition-with-arcface-in-keras-and-python/), [`Dlib`](https://sefiks.com/2020/07/11/face-recognition-with-dlib-in-python/), `SFace`, `GhostFaceNet`, `Buffalo_L`.
 
 [`Experiments`](https://github.com/serengil/deepface/tree/master/benchmarks) show that **human beings have 97.53% accuracy** on facial recognition tasks whereas those models already reached and passed that accuracy level.
 
@@ -108,7 +123,7 @@ Here, embedding is also [plotted](https://sefiks.com/2020/05/01/a-gentle-introdu
 
 **Face recognition models** - [`Demo`](https://youtu.be/eKOZawGR3y0)
 
-DeepFace is a **hybrid** face recognition package. It currently wraps many **state-of-the-art** face recognition models: [`VGG-Face`](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/) , [`FaceNet`](https://sefiks.com/2018/09/03/face-recognition-with-facenet-in-keras/), [`OpenFace`](https://sefiks.com/2019/07/21/face-recognition-with-openface-in-keras/), [`DeepFace`](https://sefiks.com/2020/02/17/face-recognition-with-facebook-deepface-in-keras/), [`DeepID`](https://sefiks.com/2020/06/16/face-recognition-with-deepid-in-keras/), [`ArcFace`](https://sefiks.com/2020/12/14/deep-face-recognition-with-arcface-in-keras-and-python/), [`Dlib`](https://sefiks.com/2020/07/11/face-recognition-with-dlib-in-python/), `SFace` and `GhostFaceNet`. The default configuration uses VGG-Face model.
+DeepFace is a **hybrid** face recognition package. It currently wraps many **state-of-the-art** face recognition models: [`VGG-Face`](https://sefiks.com/2018/08/06/deep-face-recognition-with-keras/) , [`FaceNet`](https://sefiks.com/2018/09/03/face-recognition-with-facenet-in-keras/), [`OpenFace`](https://sefiks.com/2019/07/21/face-recognition-with-openface-in-keras/), [`DeepFace`](https://sefiks.com/2020/02/17/face-recognition-with-facebook-deepface-in-keras/), [`DeepID`](https://sefiks.com/2020/06/16/face-recognition-with-deepid-in-keras/), [`ArcFace`](https://sefiks.com/2020/12/14/deep-face-recognition-with-arcface-in-keras-and-python/), [`Dlib`](https://sefiks.com/2020/07/11/face-recognition-with-dlib-in-python/), `SFace`, `GhostFaceNet` and `Buffalo_L`. The default configuration uses VGG-Face model.
 
 ```python
 models = [
@@ -121,8 +136,10 @@ models = [
   "ArcFace", 
   "Dlib", 
   "SFace",
-  "GhostFaceNet"
+  "GhostFaceNet",
+  "Buffalo_L" 
 ]
+
 
 #face verification
 result = DeepFace.verify(
@@ -145,9 +162,11 @@ embedding_objs = DeepFace.represent(
 )
 ```
 
+
 <p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/model-portfolio-20240316.jpg" width="95%" height="95%"></p>
 
 FaceNet, VGG-Face, ArcFace and Dlib are overperforming ones based on experiments - see [`BENCHMARKS`](https://github.com/serengil/deepface/tree/master/benchmarks) for more details. You can find the measured scores of various models in DeepFace and the reported scores from their original studies in the following table.
+
 
 | Model          | Measured Score | Declared Score     |
 | -------------- | -------------- | ------------------ |
@@ -284,7 +303,7 @@ The performance of RetinaFace is very satisfactory even in the crowd as seen in 
 
 You can find out more about RetinaFace on this [repo](https://github.com/serengil/retinaface).
 
-**Real Time Analysis** - [`Demo`](https://youtu.be/-c9sSJcx6wI)
+**Real Time Analysis** - [`Demo`](https://youtu.be/-c9sSJcx6wI), [`React Demo part-i`](https://youtu.be/IXoah6rhxac), [`React Demo part-ii`](https://youtu.be/_waBA-cH2D4)
 
 You can run deepface for real time videos as well. Stream function will access your webcam and apply both face recognition and facial attribute analysis. The function starts to analyze a frame if it can focus a face sequentially 5 frames. Then, it shows results 5 seconds.
 
@@ -306,11 +325,7 @@ user
 │   │   ├── Bob.jpg
 ```
 
-**React UI** - [`Demo part-i`](https://youtu.be/IXoah6rhxac), [`Demo part-ii`](https://youtu.be/_waBA-cH2D4)
-
-If you intend to perform face verification tasks directly from your browser, [deepface-react-ui](https://github.com/serengil/deepface-react-ui) is a separate repository built using ReactJS depending on deepface api.
-
-<p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-and-react.jpg" width="90%" height="90%"></p>
+If you intend to perform face verification or analysis tasks directly from your browser, [`deepface-react-ui`](https://github.com/serengil/deepface-react-ui) is a separate repository built using ReactJS depending on deepface api.
 
 **Face Anti Spoofing** - [`Demo`](https://youtu.be/UiK1aIjOBlQ)
 
@@ -333,46 +348,23 @@ DeepFace.stream(
 )
 ```
 
-**API** - [`Demo`](https://youtu.be/HeKCQ6U9XmI)
+**API** - [`Demo`](https://youtu.be/HeKCQ6U9XmI), [`Docker Demo`](https://youtu.be/9Tk9lRQareA)
 
 DeepFace serves an API as well - see [`api folder`](https://github.com/serengil/deepface/tree/master/deepface/api/src) for more details. You can clone deepface source code and run the api with the following command. It will use gunicorn server to get a rest service up. In this way, you can call deepface from an external system such as mobile app or web.
 
 ```shell
-cd scripts
+cd script
+
+# run the service directly
 ./service.sh
+
+# run the service via docker
+./dockerize.sh
 ```
 
 <p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-api.jpg" width="90%" height="90%"></p>
 
 Face recognition, facial attribute analysis and vector representation functions are covered in the API. You are expected to call these functions as http post methods. Default service endpoints will be `http://localhost:5005/verify` for face recognition, `http://localhost:5005/analyze` for facial attribute analysis, and `http://localhost:5005/represent` for vector representation. The API accepts images as file uploads (via form data), or as exact image paths, URLs, or base64-encoded strings (via either JSON or form data), providing versatile options for different client requirements. [Here](https://github.com/serengil/deepface/tree/master/deepface/api/postman), you can find a postman project to find out how these methods should be called.
-
-**Dockerized Service** - [`Demo`](https://youtu.be/9Tk9lRQareA)
-
-[![Docker Pulls](https://img.shields.io/docker/pulls/serengil/deepface?logo=docker)](https://hub.docker.com/r/serengil/deepface)
-
-The following command set will serve deepface on `localhost:5005` via docker. Then, you will be able to consume deepface services such as verify, analyze and represent. Also, if you want to build the image by your own instead of pre-built image from docker hub, [Dockerfile](https://github.com/serengil/deepface/blob/master/Dockerfile) is available in the root folder of the project.
-
-```shell
-# docker build -t serengil/deepface . # build docker image from Dockerfile
-docker pull serengil/deepface # use pre-built docker image from docker hub
-docker run -p 5005:5000 serengil/deepface
-```
-
-<p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-dockerized-v2.jpg" width="50%" height="50%"></p>
-
-**Command Line Interface** - [`Demo`](https://youtu.be/PKKTAr3ts2s)
-
-DeepFace comes with a command line interface as well. You are able to access its functions in command line as shown below. The command deepface expects the function name as 1st argument and function arguments thereafter.
-
-```shell
-#face verification
-$ deepface verify -img1_path tests/dataset/img1.jpg -img2_path tests/dataset/img2.jpg
-
-#facial analysis
-$ deepface analyze -img_path tests/dataset/img1.jpg
-```
-
-You can also run these commands if you are running deepface with docker. Please follow the instructions in the [shell script](https://github.com/serengil/deepface/blob/master/scripts/dockerize.sh#L17).
 
 **Large Scale Facial Recognition** - [`Playlist`](https://www.youtube.com/playlist?list=PLsS_1RYmYQQGSJu_Z3OVhXhGmZ86_zuIm)
 
@@ -381,6 +373,56 @@ If your task requires facial recognition on large datasets, you should combine D
 <p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-big-data.jpg" width="90%" height="90%"></p>
 
 Conversely, if your task involves facial recognition on small to moderate-sized databases, you can adopt use relational databases such as [Postgres](https://youtu.be/f41sLxn1c0k) or [SQLite](https://youtu.be/_1ShBeWToPg), or NoSQL databases like [Mongo](https://youtu.be/dmprgum9Xu8), [Redis](https://youtu.be/X7DSpUMVTsw) or [Cassandra](https://youtu.be/J_yXpc3Y8Ec) to perform exact nearest neighbor search.
+
+**Encrypt Embeddings** - `Demo with PHE`, [`Demo with FHE`](https://youtu.be/njjw0PEhH00), [`Tutorial for PHE`](https://sefiks.com/2025/03/04/vector-similarity-search-with-partially-homomorphic-encryption-in-python/), [`Tutorial for FHE`](https://sefiks.com/2021/12/01/homomorphic-facial-recognition-with-tenseal/)
+
+Even though vector embeddings are not reversible to original images, they still contain sensitive information such as fingerprints, making their security critical. Encrypting embeddings is essential for higher security applications to prevent adversarial attacks that could manipulate or extract sensitive information. Traditional encryption methods like AES are very safe but limited in securely utilizing cloud computational power for distance calculations. Herein, [homomorphic encryption](https://youtu.be/3ejI0zNPMEQ), allowing calculations on encrypted data, offers a robust alternative. In summary, we are able to compute encrypted similarity between encrypted embeddings with homomorphic encryption.
+
+```python
+from lightphe import LightPHE
+
+# define a plain vectors for source and target
+alpha = DeepFace.represent("img1.jpg")[0]["embedding"]  # user tower
+beta = DeepFace.represent("target.jpg")[0]["embedding"]  # item tower
+
+# build an additively homomorphic cryptosystem (e.g. Paillier) on-prem
+cs = LightPHE(algorithm_name = "Paillier", precision = 19)
+
+# export keys
+cs.export_keys("secret.txt"); cs.export_keys("public.txt", public=True)
+
+# encrypt source embedding
+encrypted_alpha = cs.encrypt(alpha)
+
+# remove cryptosystem and plain alpha not to be leaked in cloud
+del cs, alpha
+
+# restore the cryptosystem in cloud with only public key
+cloud_cs = LightPHE(algorithm_name = "Paillier", precision = 19, key_file = "public.txt")
+
+# dot product of encrypted and plain embedding pair
+encrypted_cosine_similarity = encrypted_alpha @ beta
+
+# computed by the cloud but cloud cannot decrypt it
+with pytest.raises(ValueError, match="must have private key"):
+    cloud_cs.decrypt(encrypted_cosine_similarity)
+
+# restore the cryptosystem on-prem with secret key
+cs = LightPHE(algorithm_name = "Paillier", precision = 19, key_file = "secret.txt")
+
+# decrypt similarity
+calculated_similarity = cs.decrypt(encrypted_cosine_similarity)[0]
+
+# verification
+threshold = 0.68 # cosine distance threshold for VGG-Face and cosine
+print("same person" if calculated_similarity >= 1 - threshold else "different persons")
+```
+
+In this scheme, we leverage the computational power of the cloud to compute encrypted cosine similarity. However, the cloud has no knowledge of the actual calculations it performs. Only the secret key holder on the on-premises side can decrypt the encrypted cosine similarity and determine whether the pair represents the same person or different individuals.
+
+Check out [`LightPHE`](https://github.com/serengil/LightPHE) library to find out more about partially homomorphic encryption.
+
+Additionally, you can opt for fully homomorphic encryption (FHE) instead of partially homomorphic encryption (PHE). However, FHE has certain limitations, including larger ciphertexts and keys, higher computational demands, and unsuitability for memory-constrained environments. Nevertheless, if you are determined to use FHE over PHE, you may consider exploring the [`CipherFace`](https://github.com/serengil/cipherface) library. It integrates DeepFace and TenSEAL, offering a simple interface for encrypting vector embeddings using FHE.
 
 ## Contribution
 
@@ -392,66 +434,106 @@ Before creating a PR, you should run the unit tests and linting locally by runni
 
 There are many ways to support a project - starring⭐️ the GitHub repo is just one 🙏
 
-If you do like this work, then you can support it financially on [Patreon](https://www.patreon.com/serengil?repo=deepface), [GitHub Sponsors](https://github.com/sponsors/serengil) or [Buy Me a Coffee](https://buymeacoffee.com/serengil).
+If you do like this work, then you can support it financially on [Patreon](https://www.patreon.com/serengil?repo=deepface), [GitHub Sponsors](https://github.com/sponsors/serengil) or [Buy Me a Coffee](https://buymeacoffee.com/serengil). Also, your company's logo will be shown on README on GitHub if you become a sponsor in gold, silver or bronze tiers.
 
 <a href="https://www.patreon.com/serengil?repo=deepface">
 <img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/patreon.png" width="30%" height="30%">
 </a>
 
+<!--
+<a href="https://github.com/sponsors/serengil">
+<img src="https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/icon/github_sponsor_button.png" width="37%" height="37%">
+</a>
+
 <a href="https://buymeacoffee.com/serengil">
 <img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/bmc-button.png" width="25%" height="25%">
 </a>
+-->
 
-Also, your company's logo will be shown on README on GitHub and PyPI if you become a sponsor in gold, silver or bronze tiers.
+<!--
+Additionally, you can help us reach a wider audience by upvoting our posts on Hacker News and Product Hunt.
+
+<div style="display: flex; align-items: center; gap: 10px;">
+  <a href="https://news.ycombinator.com/item?id=42584896">
+    <img src="https://hackerbadge.vercel.app/api?id=42584896&type=orange" style="width: 250px; height: 54px;" width="250" alt="Featured on Hacker News">
+  </a>
+  
+  <a href="https://www.producthunt.com/posts/deepface?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-deepface" target="_blank">
+    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=753599&theme=light" alt="DeepFace - A Lightweight Deep Face Recognition Library for Python | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
+  </a>
+</div>
+-->
 
 ## Citation
 
-Please cite deepface in your publications if it helps your research - see [`CITATIONS`](https://github.com/serengil/deepface/blob/master/CITATION.md) for more details. Here are its BibTex entries:
+Please cite deepface in your publications if it helps your research.
 
-If you use deepface in your research for facial recogntion or face detection purposes, please cite these publications:
+<details open>
+  <summary>S. Serengil and A. Ozpinar, <b>"A Benchmark of Facial Recognition Pipelines and Co-Usability Performances of Modules"</b>, <i>Journal of Information Technologies</i>, vol. 17, no. 2, pp. 95-107, 2024.</summary>
+  
+  ```BibTeX
+  @article{serengil2024lightface,
+    title     = {A Benchmark of Facial Recognition Pipelines and Co-Usability Performances of Modules},
+    author    = {Serengil, Sefik and Ozpinar, Alper},
+    journal   = {Journal of Information Technologies},
+    volume    = {17},
+    number    = {2},
+    pages     = {95-107},
+    year      = {2024},
+    doi       = {10.17671/gazibtd.1399077},
+    url       = {https://dergipark.org.tr/en/pub/gazibtd/issue/84331/1399077},
+    publisher = {Gazi University}
+  }
+  ```
+</details>
 
-```BibTeX
-@article{serengil2024lightface,
-  title     = {A Benchmark of Facial Recognition Pipelines and Co-Usability Performances of Modules},
-  author    = {Serengil, Sefik and Ozpinar, Alper},
-  journal   = {Journal of Information Technologies},
-  volume    = {17},
-  number    = {2},
-  pages     = {95-107},
-  year      = {2024},
-  doi       = {10.17671/gazibtd.1399077},
-  url       = {https://dergipark.org.tr/en/pub/gazibtd/issue/84331/1399077},
-  publisher = {Gazi University}
-}
-```
+<details>
+  <summary>S. I. Serengil and A. Ozpinar, <b>"LightFace: A Hybrid Deep Face Recognition Framework"</b>, <i>2020 Innovations in Intelligent Systems and Applications Conference (ASYU)</i>, 2020, pp. 23-27.</summary>
+  
+  ```BibTeX
+  @inproceedings{serengil2020lightface,
+    title        = {LightFace: A Hybrid Deep Face Recognition Framework},
+    author       = {Serengil, Sefik Ilkin and Ozpinar, Alper},
+    booktitle    = {2020 Innovations in Intelligent Systems and Applications Conference (ASYU)},
+    pages        = {23-27},
+    year         = {2020},
+    doi          = {10.1109/ASYU50717.2020.9259802},
+    url          = {https://ieeexplore.ieee.org/document/9259802},
+    organization = {IEEE}
+  }
+  ```
+</details>
 
-```BibTeX
-@inproceedings{serengil2020lightface,
-  title        = {LightFace: A Hybrid Deep Face Recognition Framework},
-  author       = {Serengil, Sefik Ilkin and Ozpinar, Alper},
-  booktitle    = {2020 Innovations in Intelligent Systems and Applications Conference (ASYU)},
-  pages        = {23-27},
-  year         = {2020},
-  doi          = {10.1109/ASYU50717.2020.9259802},
-  url          = {https://ieeexplore.ieee.org/document/9259802},
-  organization = {IEEE}
-}
-```
+<details>
+  <summary>S. I. Serengil and A. Ozpinar, <b>"HyperExtended LightFace: A Facial Attribute Analysis Framework"</b>, <i>2021 International Conference on Engineering and Emerging Technologies (ICEET)</i>, 2021, pp. 1-4.</summary>
+  
+  ```BibTeX
+  @inproceedings{serengil2021lightface,
+    title        = {HyperExtended LightFace: A Facial Attribute Analysis Framework},
+    author       = {Serengil, Sefik Ilkin and Ozpinar, Alper},
+    booktitle    = {2021 International Conference on Engineering and Emerging Technologies (ICEET)},
+    pages        = {1-4},
+    year         = {2021},
+    doi          = {10.1109/ICEET53442.2021.9659697},
+    url          = {https://ieeexplore.ieee.org/document/9659697},
+    organization = {IEEE}
+  }
+  ```
+</details>
 
-On the other hand, if you use deepface in your research for facial attribute analysis purposes such as age, gender, emotion or ethnicity prediction tasks, please cite this publication.
-
-```BibTeX
-@inproceedings{serengil2021lightface,
-  title        = {HyperExtended LightFace: A Facial Attribute Analysis Framework},
-  author       = {Serengil, Sefik Ilkin and Ozpinar, Alper},
-  booktitle    = {2021 International Conference on Engineering and Emerging Technologies (ICEET)},
-  pages        = {1-4},
-  year         = {2021},
-  doi          = {10.1109/ICEET53442.2021.9659697},
-  url          = {https://ieeexplore.ieee.org/document/9659697},
-  organization = {IEEE}
-}
-```
+<details>
+  <summary>S. Serengil and A. Ozpinar, <b>"CipherFace: A Fully Homomorphic Encryption-Driven Framework for Secure Cloud-Based Facial Recognition"</b>, arXiv preprint arXiv: 2502.18154, 2025.</summary>
+  
+  ```BibTeX
+  @article{serengil2025cipherface,
+    title={CipherFace: A Fully Homomorphic Encryption-Driven Framework for Secure Cloud-Based Facial Recognition},
+    author={Serengil, Sefik and Ozpinar, Alper},
+    journal={arXiv preprint arXiv:2502.18514},
+    note={doi: 10.48550/arXiv.2502.18514. [Online]. Available: \url{https://arxiv.org/abs/2502.18514}},
+    year={2025}
+  }
+  ```
+</details>
 
 Also, if you use deepface in your GitHub projects, please add `deepface` in the `requirements.txt`.
 
@@ -459,6 +541,7 @@ Also, if you use deepface in your GitHub projects, please add `deepface` in the 
 
 DeepFace is licensed under the MIT License - see [`LICENSE`](https://github.com/serengil/deepface/blob/master/LICENSE) for more details.
 
-DeepFace wraps some external face recognition models: [VGG-Face](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/), [Facenet](https://github.com/davidsandberg/facenet/blob/master/LICENSE.md) (both 128d and 512d), [OpenFace](https://github.com/iwantooxxoox/Keras-OpenFace/blob/master/LICENSE), [DeepFace](https://github.com/swghosh/DeepFace), [DeepID](https://github.com/Ruoyiran/DeepID/blob/master/LICENSE.md), [ArcFace](https://github.com/leondgarse/Keras_insightface/blob/master/LICENSE), [Dlib](https://github.com/davisking/dlib/blob/master/dlib/LICENSE.txt), [SFace](https://github.com/opencv/opencv_zoo/blob/master/models/face_recognition_sface/LICENSE) and [GhostFaceNet](https://github.com/HamadYA/GhostFaceNets/blob/main/LICENSE). Besides, age, gender and race / ethnicity models were trained on the backbone of VGG-Face with transfer learning. Similarly, DeepFace wraps many face detectors: [OpenCv](https://github.com/opencv/opencv/blob/4.x/LICENSE), [Ssd](https://github.com/opencv/opencv/blob/master/LICENSE), [Dlib](https://github.com/davisking/dlib/blob/master/LICENSE.txt), [MtCnn](https://github.com/ipazc/mtcnn/blob/master/LICENSE), [Fast MtCnn](https://github.com/timesler/facenet-pytorch/blob/master/LICENSE.md), [RetinaFace](https://github.com/serengil/retinaface/blob/master/LICENSE), [MediaPipe](https://github.com/google/mediapipe/blob/master/LICENSE), [YuNet](https://github.com/ShiqiYu/libfacedetection/blob/master/LICENSE), [Yolo](https://github.com/derronqi/yolov8-face/blob/main/LICENSE) and [CenterFace](https://github.com/Star-Clouds/CenterFace/blob/master/LICENSE). Finally, DeepFace is optionally using [face anti spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/LICENSE) to determine the given images are real or fake. License types will be inherited when you intend to utilize those models. Please check the license types of those models for production purposes.
+DeepFace wraps some external face recognition models: [VGG-Face](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/), [Facenet](https://github.com/davidsandberg/facenet/blob/master/LICENSE.md) (both 128d and 512d), [OpenFace](https://github.com/iwantooxxoox/Keras-OpenFace/blob/master/LICENSE), [DeepFace](https://github.com/swghosh/DeepFace), [DeepID](https://github.com/Ruoyiran/DeepID/blob/master/LICENSE.md), [ArcFace](https://github.com/leondgarse/Keras_insightface/blob/master/LICENSE), [Dlib](https://github.com/davisking/dlib/blob/master/dlib/LICENSE.txt), [SFace](https://github.com/opencv/opencv_zoo/blob/master/models/face_recognition_sface/LICENSE), [GhostFaceNet](https://github.com/HamadYA/GhostFaceNets/blob/main/LICENSE) and
+[Buffalo_L](https://github.com/deepinsight/insightface/blob/master/README.md). Besides, age, gender and race / ethnicity models were trained on the backbone of VGG-Face with transfer learning. Similarly, DeepFace wraps many face detectors: [OpenCv](https://github.com/opencv/opencv/blob/4.x/LICENSE), [Ssd](https://github.com/opencv/opencv/blob/master/LICENSE), [Dlib](https://github.com/davisking/dlib/blob/master/LICENSE.txt), [MtCnn](https://github.com/ipazc/mtcnn/blob/master/LICENSE), [Fast MtCnn](https://github.com/timesler/facenet-pytorch/blob/master/LICENSE.md), [RetinaFace](https://github.com/serengil/retinaface/blob/master/LICENSE), [MediaPipe](https://github.com/google/mediapipe/blob/master/LICENSE), [YuNet](https://github.com/ShiqiYu/libfacedetection/blob/master/LICENSE), [Yolo](https://github.com/derronqi/yolov8-face/blob/main/LICENSE) and [CenterFace](https://github.com/Star-Clouds/CenterFace/blob/master/LICENSE). Finally, DeepFace is optionally using [face anti spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/LICENSE) to determine the given images are real or fake. License types will be inherited when you intend to utilize those models. Please check the license types of those models for production purposes.
 
 DeepFace [logo](https://thenounproject.com/term/face-recognition/2965879/) is created by [Adrien Coquet](https://thenounproject.com/coquet_adrien/) and it is licensed under [Creative Commons: By Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/).

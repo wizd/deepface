@@ -141,7 +141,8 @@ def verify(
         """
         if isinstance(img_path, list):
             # given image is already pre-calculated embedding
-            if not all(isinstance(dim, float) for dim in img_path):
+            if not all(isinstance(dim, (float, int)) for dim in img_path):
+
                 raise ValueError(
                     f"When passing img{index}_path as a list,"
                     " ensure that all its items are of type float."
@@ -422,6 +423,7 @@ def find_threshold(model_name: str, distance_metric: str) -> float:
         "DeepFace": {"cosine": 0.23, "euclidean": 64, "euclidean_l2": 0.64},
         "DeepID": {"cosine": 0.015, "euclidean": 45, "euclidean_l2": 0.17},
         "GhostFaceNet": {"cosine": 0.65, "euclidean": 35.71, "euclidean_l2": 1.10},
+        "Buffalo_L": {"cosine": 0.55, "euclidean": 0.6, "euclidean_l2": 1.1},
     }
 
     threshold = thresholds.get(model_name, base_threshold).get(distance_metric, 0.4)
