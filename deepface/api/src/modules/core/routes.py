@@ -312,7 +312,17 @@ def extract_faces():
         # 优化图像处理和转换
         for face in faces:
             if "face" in face and isinstance(face["face"], np.ndarray):
-                _, buffer = cv2.imencode('.jpg', face["face"], [cv2.IMWRITE_JPEG_QUALITY, 85])
+                # 确保图像数据在正确的范围内 (0-255)
+                face_img = face["face"]
+                # 如果图像是归一化的 (0-1 范围)，将其转换为 0-255 范围
+                if face_img.max() <= 1.0:
+                    face_img = (face_img * 255).astype(np.uint8)
+                # 确保图像是 BGR 格式用于 OpenCV 处理
+                if len(face_img.shape) == 3 and face_img.shape[2] == 3:
+                    # 默认假设图像是 RGB 格式，需要转换为 BGR 用于 OpenCV
+                    face_img = face_img[:, :, ::-1]
+                # 编码为 JPEG
+                _, buffer = cv2.imencode('.jpg', face_img, [cv2.IMWRITE_JPEG_QUALITY, 85])
                 face["face"] = f"data:image/jpeg;base64,{base64.b64encode(buffer.tobytes()).decode('utf-8')}"
 
         return {"results": faces}
