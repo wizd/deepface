@@ -311,6 +311,17 @@ def extract_faces():
 
         # 优化图像处理和转换
         for face in faces:
+            # 确保所有numpy数据类型都转换为Python原生类型
+            for key in face:
+                if isinstance(face[key], np.integer):
+                    face[key] = int(face[key])
+                elif isinstance(face[key], np.floating):
+                    face[key] = float(face[key])
+                elif isinstance(face[key], np.ndarray):
+                    if key != "face":  # 只处理非人脸图像的数组
+                        face[key] = face[key].tolist()
+            
+            # 处理人脸图像
             if "face" in face and isinstance(face["face"], np.ndarray):
                 # 确保图像数据在正确的范围内 (0-255)
                 face_img = face["face"]
